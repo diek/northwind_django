@@ -1,3 +1,5 @@
+# northwind/admin.py
+
 # -*- coding: utf-8 -*-
 from django.contrib import admin
 
@@ -7,34 +9,31 @@ from .models import Category, Order, OrderDetail, Product, Shipper, Supplier
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = (
-        "created_at",
-        "updated_at",
         "category_id",
         "category_name",
         "description",
     )
-    list_filter = ("created_at", "updated_at")
-    date_hierarchy = "created_at"
+    list_filter = (
+        "category_name",
+        "description",
+    )
+    date_hierarchy = "updated_at"
 
 
 @admin.register(Shipper)
 class ShipperAdmin(admin.ModelAdmin):
     list_display = (
-        "created_at",
-        "updated_at",
         "shipper_id",
         "company_name",
         "phone",
     )
-    list_filter = ("created_at", "updated_at")
-    date_hierarchy = "created_at"
+    list_filter = ("company_name", "updated_at")
+    date_hierarchy = "updated_at"
 
 
 @admin.register(Supplier)
 class SupplierAdmin(admin.ModelAdmin):
     list_display = (
-        "created_at",
-        "updated_at",
         "supplier_id",
         "company_name",
         "contact_name",
@@ -46,8 +45,11 @@ class SupplierAdmin(admin.ModelAdmin):
         "country",
         "phone",
     )
-    list_filter = ("created_at", "updated_at")
-    date_hierarchy = "created_at"
+    list_filter = (
+        "company_name",
+        "contact_name",
+    )
+    date_hierarchy = "updated_at"
 
 
 @admin.register(Product)
@@ -67,8 +69,8 @@ class ProductAdmin(admin.ModelAdmin):
         "discontinued",
     )
     list_filter = (
-        "created_at",
-        "updated_at",
+        "product_name",
+        "units_in_stock",
         "supplier",
         "category",
         "discontinued",
@@ -106,7 +108,7 @@ class OrderAdmin(admin.ModelAdmin):
         "shipped_date",
         "ship_via",
     )
-    date_hierarchy = "created_at"
+    date_hierarchy = "orderdate"
 
 
 @admin.register(OrderDetail)

@@ -3,7 +3,7 @@ import os
 
 from django.core.management.base import BaseCommand, CommandError
 
-from accounts.models import Region
+from user_accounts.models import Region
 
 
 class Command(BaseCommand):

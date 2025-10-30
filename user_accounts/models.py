@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from config.helpers import TimeStampedModel
+from _config.helpers import TimeStampedModel
 
 from .managers import CustomUserManager
 
@@ -31,9 +31,11 @@ class NorthWindUser(AbstractUser, TimeStampedModel):
     )
     email = models.EmailField(_("email address"), unique=True)
     timezone = models.CharField(
-        _("Timezone"), max_length=50, choices=get_timezone_choices, default="UTC"
+        _("Timezone"),
+        max_length=50,
+        choices=get_timezone_choices,
+        default="UTC",
     )
-    custom_id = models.CharField(max_length=6)
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
@@ -43,7 +45,6 @@ class NorthWindUser(AbstractUser, TimeStampedModel):
         return self.email
 
     class Meta:
-        db_table = "auth_user"  # Optional: if you want to keep the same table name
         ordering = ["last_name", "first_name"]
         indexes = [
             models.Index(fields=["last_name", "first_name"]),
@@ -82,7 +83,7 @@ class Territory(TimeStampedModel):
         return f"{self.territory_description} ({self.region})"
 
 
-class Customer(TimeStampedModel):
+class CustomerContact(TimeStampedModel):
     customer_id = models.CharField(primary_key=True, max_length=10)
     user = models.OneToOneField(NorthWindUser, on_delete=models.CASCADE)
     company_name = models.CharField(_("Company Name"), max_length=255, db_index=True)
@@ -95,8 +96,8 @@ class Customer(TimeStampedModel):
     phone = models.CharField(_("Phone"), max_length=50, blank=True)
 
     class Meta:
-        verbose_name = _("Customer")
-        verbose_name_plural = _("Customers")
+        verbose_name = _("CustomerContact")
+        verbose_name_plural = _("CustomerContacts")
         ordering = ["company_name"]
         indexes = [
             models.Index(fields=["city", "country"]),
@@ -141,6 +142,9 @@ class Employee(TimeStampedModel):
     class Meta:
         verbose_name = _("Employee")
         verbose_name_plural = _("Employees")
+
+    def __str__(self):
+        return f"{self.user.first_name} {self.user.last_name}"
 
 
 class EmployeeTerritory(TimeStampedModel):

@@ -10,7 +10,15 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+from os import getenv
 from pathlib import Path
+
+import dj_database_url
+from dotenv import load_dotenv
+
+load_dotenv()
+
+DATABASE_URL = getenv("DATABASE_URL")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -39,7 +47,10 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
 ]
 
-PROJECT_APPS = ["northwind.apps.NorthwindConfig", "accounts.apps.AccountsConfig"]
+PROJECT_APPS = [
+    "northwind.apps.NorthwindConfig",
+    "user_accounts.apps.UserAccountsConfig",
+]
 
 THIRD_PARTY_APPS = ["django_extensions"]
 
@@ -55,7 +66,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "config.urls"
+ROOT_URLCONF = "_config.urls"
 
 TEMPLATES = [
     {
@@ -67,23 +78,24 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "user_accounts.context_processors.my_context_processor",
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = "config.wsgi.application"
+WSGI_APPLICATION = "_config.wsgi.application"
 
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "northwind.db",
-    }
+    "default": dj_database_url.config()
+    if getenv("DATABASE_URL")
+    else {"ENGINE": "django.db.backends.postgresql", "NAME": "northwind"}
 }
+DATABASES["default"].update({"ATOMIC_REQUESTS": True, "CONN_MAX_AGE": 600})
 
 
 # Password validation
@@ -104,7 +116,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTH_USER_MODEL = "accounts.NorthWindUser"
+AUTH_USER_MODEL = "user_accounts.NorthWindUser"
 
 LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = "home"

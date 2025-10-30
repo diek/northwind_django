@@ -3,8 +3,8 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from accounts.models import Customer, Employee
-from config.helpers import TimeStampedModel
+from _config.helpers import TimeStampedModel
+from user_accounts.models import CustomerContact, Employee
 
 
 class Category(TimeStampedModel):
@@ -123,12 +123,12 @@ class Product(TimeStampedModel):
 class Order(TimeStampedModel):
     order_id = models.AutoField(primary_key=True)
     customer = models.ForeignKey(
-        Customer,
+        CustomerContact,
         on_delete=models.PROTECT,
         blank=True,
         null=True,
         related_name="orders",
-        verbose_name=_("Customer"),
+        verbose_name=_("CustomerContact"),
     )
     employee = models.ForeignKey(
         Employee,

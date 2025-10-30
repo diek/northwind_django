@@ -4,11 +4,13 @@
 
 <head>
   <meta charset="utf-8">
-  <title>{% block title %}Django and Northwind{% endblock %}</title>
+  <title>{% block title %}{{ site_name }} - {{ current_year }}{% endblock %}</title>
 </head>
 
 <body>
   <main>
+    <h1>Welcome to {{ site_name }}!</h1>
+    <p>Copyright &copy; {{ current_year }}</p>
     {% block content %}
     {% endblock %}
   </main>

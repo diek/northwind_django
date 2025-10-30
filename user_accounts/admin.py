@@ -2,7 +2,7 @@
 from django.contrib import admin
 
 from .models import (
-    Customer,
+    CustomerContact,
     Employee,
     EmployeeTerritory,
     NorthWindUser,
@@ -27,7 +27,6 @@ class NorthWindUserAdmin(admin.ModelAdmin):
         "user_type",
         "email",
         "timezone",
-        "custom_id",
     )
     list_filter = (
         "last_login",
@@ -67,8 +66,8 @@ class TerritoryAdmin(admin.ModelAdmin):
     date_hierarchy = "created_at"
 
 
-@admin.register(Customer)
-class CustomerAdmin(admin.ModelAdmin):
+@admin.register(CustomerContact)
+class CustomerContactAdmin(admin.ModelAdmin):
     list_display = (
         "created_at",
         "updated_at",
